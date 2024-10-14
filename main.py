@@ -1,6 +1,7 @@
 import numpy as np
 from src.definitions import *
 import src.zeidmet as zeidmet
+from src.tests import * 
 
 # 14-10-2024
 # Atrast:
@@ -26,6 +27,8 @@ U = np.matmul(
     ))
 )
 
+print("[info]: mezglu spriegumi [U]:\n", U, "\n")
+
 I_z = np.matmul(
     np.linalg.inv(np.diag(R.reshape(-1))),
     (E + np.matmul(
@@ -33,6 +36,8 @@ I_z = np.matmul(
         U
     ))
 )
+
+print("[info]: strāvas pēc MPM [I_z]:\n", I_z, "\n")
 
 R_k = np.matmul(
     N,
@@ -44,11 +49,13 @@ R_k = np.matmul(
 
 E_k = np.matmul(
     N,
-    np.matmul(
-        (E - np.diag(R.reshape(-1))),
-        J
+    (E - np.matmul(
+            np.diag(R.reshape(-1)),
+            J
+        )
     )
 )
+
 
 I_k = zeidmet.Calculate(
     R_k, 
@@ -60,3 +67,7 @@ I_z_k = np.matmul(
     np.transpose(N),
     I_k
 ) + J
+
+print('[info]: strāvas pēc KSM [I_z_k]:\n', I_z_k, "\n")
+
+print("[info]: strāvu pārbaude [I_z_k] - [I_z]:\n", I_z_k - I_z, "\n")
